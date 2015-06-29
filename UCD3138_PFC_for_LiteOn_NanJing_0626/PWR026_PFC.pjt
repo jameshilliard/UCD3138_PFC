@@ -1,0 +1,77 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="Y:\dp_firmware\Cyclone 2\Bosheng's test area\PWR026_PFC_IPM\"
+ProjectType=Executable
+CPUFamily=TMS470R1X
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="C:\CCStudio_v3.3\tms470\cgtools\lib\rts32tiabi.lib"
+Source="cyclone_global_variables_defs.c"
+Source="device_id.c"
+Source="flash.c"
+Source="init_dpwms.c"
+Source="init_filters.c"
+Source="init_front_ends.c"
+Source="init_loop_mux.c"
+Source="init_miscellaneous.c"
+Source="interrupts.c"
+Source="load.asm"
+Source="main.c"
+Source="pmbus.c"
+Source="pmbus_coefficients.c"
+Source="pmbus_handler.c"
+Source="primary_secondary_communication.c"
+Source="standard_interrupt.c"
+Source="uart.c"
+Source="zoiw.asm"
+Source="software_interrupt_wrapper.c"
+Source="cyclone.cmd"
+Source="cyclone_headers.cmd"
+
+["Debug" Settings]
+InitialBuildCmd=perl ./build_scripts/create_date_dot_h.pl;Run=Always
+FinalBuildCmd=hex470 -x -memwidth 8 .\debug\cyclone.out;Run=Always
+FinalBuildCmd=perl ./build_scripts/checkmem.pl PWR026_PFC PWR026_PFC.map;Run=Always
+FinalBuildCmd=perl ./build_scripts/build.pl PWR026_PFC;Run=Always
+
+["Compiler" Settings: "Debug"]
+Options=-g -k -ppa -ppc -al -as -oi0 -o2 -ea.asm -fr"$(Proj_dir)\Debug" -fs"$(Proj_dir)\Debug" -d"_DEBUG" -mt -mv4 --abi=tiabi --endian=big
+
+["Compiler" Settings: "Release"]
+Options=-o3 -fr"$(Proj_dir)\Release" -mv4 --abi=tiabi
+
+["Linker" Settings: "Debug"]
+Options=-c -heap10 -m".\PWR026_PFC.map" -o".\Debug\cyclone.out" -stack200 -w -x
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\volume1.map" -o".\Release\volume1.out" -w -x
+
+["interrupts.c" Settings: "Debug"]
+Options="Compiler" +{-oi200 -mf} -{-oi0 -mt}
+
+["standard_interrupt.c" Settings: "Debug"]
+Options="Compiler" +{-oi200 -o3 -mf} -{-oi0 -o2 -mt}
+
+["cyclone.cmd" Settings: "Debug"]
+LinkOrder=2
+
+["cyclone.cmd" Settings: "Release"]
+LinkOrder=1
+
+["cyclone_headers.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["cyclone_headers.cmd" Settings: "Release"]
+LinkOrder=1
+
+
+
+["software_interrupt_wrapper.c" Settings: "Debug"]
+Options="Compiler" +{--code_state=32} -{-mt}
+
